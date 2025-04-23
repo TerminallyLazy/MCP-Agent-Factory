@@ -1,0 +1,10 @@
+# Core dependencies
+pydantic
+python-dotenv
+openai
+
+# MCP and Pydantic AI dependencies
+pydantic-ai
+mcp
+griffe
+logfire
