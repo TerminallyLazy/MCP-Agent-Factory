@@ -101,6 +101,19 @@ python simple_agent.py --model gpt-4o
 python simple_agent.py --query "What are MCP tools?" --model gpt-4o-mini
 ```
 
+## Screenshots
+
+![mcp-agent-factory4](https://github.com/user-attachments/assets/7bf21ce4-361e-48c4-937c-d1ec14b5742c)
+
+![mcp-agent-factory3](https://github.com/user-attachments/assets/75b9ac84-afe2-4c17-b340-046f43dd3056)
+
+![mcp-agent-factory6](https://github.com/user-attachments/assets/80efb1b9-faa3-4271-b5db-32ae82bf9dea)
+
+![mcp-agent-factory2](https://github.com/user-attachments/assets/459c4eaf-0bbc-4f0c-915a-84b35cf21efc)
+
+![mcp-agent-factory](https://github.com/user-attachments/assets/4decc249-3c65-4f22-af0e-b7fd1d348e33)
+
+
 ## Troubleshooting
 
 If you encounter issues with the MCP integration:
