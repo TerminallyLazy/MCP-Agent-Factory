@@ -1,0 +1,34 @@
+- Issue: ModuleNotFoundError: No module named 'agents.mcp_client'
+- Cause: the agent script didn't insert the project root into `sys.path` early enough, so Python couldn't locate the `agents` package.
+- Solution: Updated `agents/generated/my_mcp_agent.py` to dynamically determine the project root, insert it at `sys.path[0]`, and change the working directory to the project root before importing `agents.mcp_client`. Added `__init__.py` in `agents/generated` to ensure it's a proper package.
+- Next: Re-run the agent to verify the import error is resolved and check debug prints for `project_root`, `cwd`, and `sys.path[0]`.
+
+## Known Issues
+
+*   **Agent Input**: Requires refactoring `activeProcesses` into a shared module (`frontend/src/lib/processManager.ts`) so the `/api/agent/input` route can access processes started by `/api/agent/stream`. (Refactoring DONE, testing required)
+*   **Agent Terminal Scrolling**: Text sometimes overflows instead of scrolling. Added `h-0` to ScrollArea as a potential fix. (Fix applied, needs verification)
+*   **Python Agent Shutdown Error (`RuntimeError: Attempted to exit cancel scope...`)**: When the Node.js backend terminates the Python agent process (e.g., closing terminal, inactivity), the agent often logs `RuntimeError: Attempted to exit cancel scope in a different task than it was entered in`. This originates from `anyio`'s context management (`AsyncExitStack`, `TaskGroup`) used within `mcp-py`'s `stdio_client`. The external termination seems to disrupt `anyio`'s internal task tracking during cleanup, even when explicit cleanup is skipped in the agent script. Requires further investigation, possibly needing fixes in `mcp-py` or advanced signal handling in the agent to ensure graceful `anyio` shutdown before process termination.
+*   **Agent Input 404 / Stream 404 Race Condition**: The 404 errors on `/api/agent/input` and `/api/agent/stream` were caused by a race condition. The `on('close', ...)` handler in `/api/agent/run` was deleting the process from `activeProcesses` immediately upon agent termination. If the agent exited quickly (before `/stream` or `/input` requests arrived), these subsequent requests would fail because the process entry was already gone. 
+    - **Solution**: Removed the `delete activeProcesses[agentId]` call from the `on('close', ...)` handler in `/api/agent/run/route.ts`. Cleanup is now handled solely by the interval timer in `processManager.ts` which checks the process `exitCode`. This ensures the process entry remains available for a short time even after exit, allowing `/stream` and `/input` to correctly identify it as exited rather than missing.
+
+- Backend server likely not running, as `lsof -i :3001` showed no listening process.
+- The `backend/` directory is empty.
+
+// Note: Found EventSource URL in agent-terminal.tsx: `/api/agent/stream?agentId=${agentId}`.
+// This is relative, so it should use the frontend's host/port.
+// Error message mentioned port 3001, but code uses relative path.
+// Need to verify which port the Next.js dev server is actually running on.
+
+// Backend Analysis: /api/agent/stream
+// - Fetches process info from `activeProcesses` using agentId.
+// - Checks if process exists and hasn't exited (processInfo.process.exitCode === null).
+// - Checks if another stream is already attached (processInfo.stream && !processInfo.stream.destroyed).
+// - If stream exists and is not destroyed, returns 409 Conflict.
+// - Otherwise, creates a new Node.js Readable stream (`streamFromChildProcess`), attaches listeners to the existing process stdout/stderr, and stores the stream reference in `processInfo.stream`.
+// Potential issue: Could there be a race condition where two stream requests come in quickly? Or is the `processInfo.stream.destroyed` check not working as expected after a client disconnects?
+
+## EventSource Error (Agent Terminal)
+
+**Issue:** Frontend receives `EventSource ERROR` when trying to connect to `/api/agent/stream`.
+**Cause:** The Next.js development server isn't running to handle the API routes defined in `frontend/src/app/api/`.
+**Solution:** Run `npm run dev` or `yarn dev` within the `frontend` directory.

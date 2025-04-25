@@ -8,6 +8,7 @@ This directory contains the necessary files to integrate the Model Context Proto
 mcp-integration/
 ├── agents/                  # Agent implementation
 │   ├── __init__.py          # Agent class definition
+│   ├── lightweight_agent.py # Lightweight agent implementation
 │   ├── mcp/                 # MCP client implementation
 │   │   ├── __init__.py
 │   │   ├── agent_factory.py # Factory for creating MCP agents
@@ -18,6 +19,7 @@ mcp-integration/
 ├── docs/                    # Documentation
 │   └── MCP_INTEGRATION.md   # Integration guide
 ├── example.py               # Example usage
+├── simple_agent.py          # Simple lightweight agent example
 ├── mcp_config.json          # MCP server configuration
 ├── README.md                # This file
 └── requirements.txt         # Python dependencies
@@ -54,8 +56,50 @@ The integration provides several pre-configured agents:
 
 1. **General Assistant Agent**: A general-purpose assistant with access to MCP tools
 2. **Tool Listing Agent**: An agent that lists and demonstrates available tools
+3. **Lightweight Agent**: A simplified agent implementation for direct control
 
-You can create your own custom agents by using the `create_mcp_agent` function in `agents/mcp/agent_factory.py`.
+### Factory Approach
+You can create advanced custom agents using the `create_mcp_agent` function in `agents/mcp/agent_factory.py`.
+
+### Lightweight Approach
+For a simpler implementation with more direct control, use the lightweight approach:
+
+```python
+from agents.lightweight_agent import create_agent
+
+async def main():
+    # Create a lightweight agent
+    client, agent = await create_agent(
+        config_path="path/to/config.json",
+        model_name="gpt-4o-mini"
+    )
+    
+    # Run a query
+    result = await agent.run("What can you do?")
+    print(result.output)
+    
+    # Clean up
+    await client.cleanup()
+```
+
+You can also use the interactive session:
+
+```python
+from agents.lightweight_agent import run_interactive_session
+
+async def main():
+    await run_interactive_session(
+        config_path="path/to/config.json",
+        system_prompt="You are a helpful assistant."
+    )
+```
+
+Or run the included example script:
+```bash
+python simple_agent.py --model gpt-4o
+# Or for a single query:
+python simple_agent.py --query "What are MCP tools?" --model gpt-4o-mini
+```
 
 ## Troubleshooting
 

@@ -47,28 +47,22 @@ export function ChatInterface({
     
     try {
       if (onSendMessage) {
+        // Real API call to the backend
         const response = await onSendMessage(content);
         setMessages((prev) => [...prev, response]);
       } else {
-        // Demo mode - simulate assistant response
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        // Fallback error case - should never happen in production
+        console.error("No onSendMessage handler provided to ChatInterface");
         
-        const demoResponse: ChatMessage = {
-          id: uuidv4(),
-          role: "assistant",
-          content: "I'm just a demo response. Connect this component to your backend to get real MCP responses!",
-          timestamp: new Date(),
-          toolCalls: [
-            {
-              name: "exampleTool",
-              args: { param1: "value1", param2: 42 },
-              status: "success",
-              result: "Example tool result"
-            }
-          ]
-        };
-        
-        setMessages((prev) => [...prev, demoResponse]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: uuidv4(),
+            role: "assistant",
+            content: "Configuration error: No message handler provided. Please contact the administrator.",
+            timestamp: new Date(),
+          }
+        ]);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -78,7 +72,7 @@ export function ChatInterface({
         {
           id: uuidv4(),
           role: "assistant",
-          content: "Sorry, there was an error processing your request.",
+          content: "Sorry, there was an error processing your request. Please try again later or contact support if the issue persists.",
           timestamp: new Date(),
         },
       ]);

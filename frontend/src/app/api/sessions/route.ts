@@ -1,21 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// Note: In a production environment, you would use a database
-// This is a simple in-memory store for demonstration purposes
-let sessions = [
-  {
-    id: 'session-1',
-    name: 'Project Setup',
-    lastActive: new Date().toISOString(),
-    messageCount: 8
-  },
-  {
-    id: 'session-2',
-    name: 'API Integration',
-    lastActive: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-    messageCount: 15
-  }
-];
+import { sessions, Session } from './data';
 
 // GET all sessions
 export async function GET() {

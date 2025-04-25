@@ -61,11 +61,11 @@ export function MCPProvider({ children }: { children: ReactNode }) {
       try {
         setLoading(true);
         const response = await fetch('/api/servers');
-        
+
         if (!response.ok) {
           throw new Error(`Failed to fetch servers: ${response.statusText}`);
         }
-        
+
         const data = await response.json();
         setServers(data);
         setError(null);
@@ -121,7 +121,7 @@ export function MCPProvider({ children }: { children: ReactNode }) {
       }
 
       setServers(prevServers => prevServers.filter(server => server.id !== id));
-      
+
       // If the removed server was selected, clear selection
       if (selectedServer?.id === id) {
         setSelectedServer(null);
@@ -142,7 +142,7 @@ export function MCPProvider({ children }: { children: ReactNode }) {
       if (!server) throw new Error(`Server with id ${id} not found`);
 
       const newStatus = server.status === 'online' ? 'offline' : 'online';
-      
+
       const response = await fetch(`/api/servers/${id}/status`, {
         method: 'PUT',
         headers: {
@@ -156,13 +156,13 @@ export function MCPProvider({ children }: { children: ReactNode }) {
       }
 
       const updatedServer = await response.json();
-      
-      setServers(prevServers => 
-        prevServers.map(server => 
+
+      setServers(prevServers =>
+        prevServers.map(server =>
           server.id === id ? updatedServer : server
         )
       );
-      
+
       // If this was the selected server, update it
       if (selectedServer?.id === id) {
         setSelectedServer(updatedServer);
@@ -179,22 +179,22 @@ export function MCPProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
       const response = await fetch(`/api/servers/${serverId}/tools`);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch tools: ${response.statusText}`);
       }
-      
+
       const tools = await response.json();
-      
+
       // Update the server with fetched tools
-      setServers(prevServers => 
-        prevServers.map(server => 
-          server.id === serverId 
-            ? { ...server, tools } 
+      setServers(prevServers =>
+        prevServers.map(server =>
+          server.id === serverId
+            ? { ...server, tools }
             : server
         )
       );
-      
+
       return tools;
     } catch (err) {
       console.error(`Error fetching tools for server ${serverId}:`, err);
@@ -245,18 +245,19 @@ export function useMCP() {
 export function Providers({ children }: ProvidersProps) {
   // Fix hydration by ensuring theme is only applied after mount
   const [mounted, setMounted] = useState(false);
-  
+
   // Use effect to set the mounted state after hydration
   useEffect(() => {
     setMounted(true);
   }, []);
 
   return (
-    <ThemeProvider 
-      attribute="class" 
-      defaultTheme="system" 
-      enableSystem 
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
       disableTransitionOnChange
+      forcedTheme={mounted ? undefined : "light"} // Force light theme on server to match initial client render
     >
       {mounted ? (
         <MCPProvider>

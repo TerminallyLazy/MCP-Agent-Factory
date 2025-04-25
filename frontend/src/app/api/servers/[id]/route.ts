@@ -1,45 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// Central store for registered MCP servers
-// In production, this would be in a database
-let registeredServers = [
-  {
-    id: 'filesystem-mcp',
-    name: 'Filesystem MCP',
-    url: 'https://mcp.modelcontextprotocol.io/filesystem',
-    status: 'online',
-    capabilities: {
-      tools: { listChanged: true }
-    },
-    description: 'Provides file system access capabilities through the Model Context Protocol',
-    version: '1.0.0',
-    lastConnected: new Date().toISOString()
-  },
-  {
-    id: 'github-mcp',
-    name: 'GitHub MCP',
-    url: 'https://mcp.modelcontextprotocol.io/github',
-    status: 'offline',
-    capabilities: {
-      tools: { listChanged: true }
-    },
-    description: 'Provides GitHub repository management through the Model Context Protocol',
-    version: '1.0.0',
-    lastConnected: new Date(Date.now() - 86400000).toISOString() // 1 day ago
-  },
-  {
-    id: 'fetch-mcp',
-    name: 'Fetch MCP',
-    url: 'https://mcp.modelcontextprotocol.io/fetch',
-    status: 'online',
-    capabilities: {
-      tools: { listChanged: true }
-    },
-    description: 'Provides web content fetching through the Model Context Protocol',
-    version: '1.0.0',
-    lastConnected: new Date().toISOString()
-  }
-];
+import { registeredServers, MCPServer } from '../data';
 
 // GET a specific MCP server by ID
 export async function GET(

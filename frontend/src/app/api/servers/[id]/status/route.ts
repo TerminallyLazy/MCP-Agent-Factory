@@ -1,36 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import { registeredServers, MCPServer } from "../../data";
 
-// Central store for MCP servers
-// In production, this would be in a database
-let registeredServers = [
-  {
-    id: 'filesystem-mcp',
-    name: 'Filesystem MCP',
-    url: 'https://mcp.modelcontextprotocol.io/filesystem',
-    status: 'online',
-    capabilities: {
-      tools: { listChanged: true }
-    }
-  },
-  {
-    id: 'github-mcp',
-    name: 'GitHub MCP',
-    url: 'https://mcp.modelcontextprotocol.io/github',
-    status: 'offline',
-    capabilities: {
-      tools: { listChanged: true }
-    }
-  },
-  {
-    id: 'fetch-mcp',
-    name: 'Fetch MCP',
-    url: 'https://mcp.modelcontextprotocol.io/fetch',
-    status: 'online',
-    capabilities: {
-      tools: { listChanged: true }
-    }
+// Cache for MCP clients
+const mcpClients = new Map();
+
+// Get or create an MCP client for a server
+async function getMcpClient(server: MCPServer) {
+  if (mcpClients.has(server.id)) {
+    return mcpClients.get(server.id);
   }
-];
+
+  try {
+    console.log(`Connecting to MCP server ${server.id} at ${server.url}`);
+    const transport = new StreamableHTTPClientTransport(new URL(server.url));
+
+    const client = new Client({
+      name: 'mcp-frontend',
+      version: '1.0.0',
+    });
+
+    await client.connect(transport);
+
+    // Store in cache
+    mcpClients.set(server.id, client);
+    return client;
+  } catch (error) {
+    console.error(`Error connecting to MCP server ${server.id}:`, error);
+    server.status = 'error';
+    throw error;
+  }
+}
+
+// Clean up MCP server connections and cache
+async function disconnectMcpClient(serverId: string) {
+  if (mcpClients.has(serverId)) {
+    const client = mcpClients.get(serverId);
+    try {
+      await client.disconnect();
+    } catch (error) {
+      console.error(`Error disconnecting from MCP server ${serverId}:`, error);
+    }
+    mcpClients.delete(serverId);
+  }
+}
 
 // PUT to toggle MCP server status
 export async function PUT(
@@ -40,7 +54,7 @@ export async function PUT(
   console.log(`PUT /api/servers/${params.id}/status called`);
   const id = params.id;
   const serverIndex = registeredServers.findIndex(s => s.id === id);
-  
+
   if (serverIndex === -1) {
     console.log(`Server not found: ${id}`);
     return NextResponse.json(
@@ -48,12 +62,12 @@ export async function PUT(
       { status: 404 }
     );
   }
-  
+
   try {
     const data = await request.json();
     console.log('Status update data:', data);
     const { status } = data;
-    
+
     if (status !== 'online' && status !== 'offline' && status !== 'error') {
       console.log(`Invalid status value: ${status}`);
       return NextResponse.json(
@@ -61,19 +75,44 @@ export async function PUT(
         { status: 400 }
       );
     }
-    
-    // In a real implementation, here you would connect to the actual MCP server
-    // using the MCP protocol to verify it's online or to start/stop it
-    
-    // For now, just update the status
-    console.log(`Updating server ${id} status from ${registeredServers[serverIndex].status} to ${status}`);
-    registeredServers[serverIndex].status = status;
-    
-    return NextResponse.json(registeredServers[serverIndex]);
+
+    const server = registeredServers[serverIndex];
+
+    // If setting to online, try to connect to the server
+    if (status === 'online') {
+      try {
+        console.log(`Attempting to connect to MCP server ${id}`);
+        const client = await getMcpClient(server);
+
+        // If we get here, the connection was successful
+        console.log(`Successfully connected to MCP server ${id}`);
+        server.status = 'online';
+        server.lastConnected = new Date().toISOString();
+      } catch (error) {
+        console.error(`Failed to connect to MCP server ${id}:`, error);
+        server.status = 'error';
+        return NextResponse.json(
+          {
+            ...server,
+            error: `Failed to connect to server: ${error instanceof Error ? error.message : 'Unknown error'}`
+          },
+          { status: 500 }
+        );
+      }
+    } else if (status === 'offline') {
+      // If setting to offline, disconnect from the server
+      await disconnectMcpClient(id);
+      server.status = 'offline';
+    } else {
+      // Just update the status
+      server.status = status;
+    }
+
+    return NextResponse.json(server);
   } catch (error: any) {
     console.error('Error updating server status:', error);
     return NextResponse.json(
-      { error: `Invalid request data: ${error.message}` },
+      { error: `Invalid request data: ${error instanceof Error ? error.message : 'Unknown error'}` },
       { status: 400 }
     );
   }

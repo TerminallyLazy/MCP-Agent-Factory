@@ -1,49 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-
-
-
-// Database of registered MCP servers - would be stored in an actual database in production
-// Using real MCP-compliant server entries based on the Model Context Protocol specification
-export const registeredServers = [
-  {
-    id: 'filesystem-mcp',
-    name: 'Filesystem MCP',
-    url: 'https://mcp.modelcontextprotocol.io/filesystem',
-    status: 'online',
-    capabilities: {
-      tools: { listChanged: true }
-    },
-    description: 'Provides secure file system access capabilities',
-    version: '1.0.0',
-    lastConnected: new Date().toISOString()
-  },
-  {
-    id: 'github-mcp',
-    name: 'GitHub MCP',
-    url: 'https://mcp.modelcontextprotocol.io/github',
-    status: 'offline',
-    capabilities: {
-      tools: { listChanged: true }
-    },
-    description: 'Provides GitHub repository management capabilities',
-    version: '1.0.0',
-    lastConnected: new Date(Date.now() - 86400000).toISOString()
-  },
-  {
-    id: 'fetch-mcp',
-    name: 'Fetch MCP',
-    url: 'https://mcp.modelcontextprotocol.io/fetch',
-    status: 'online',
-    capabilities: {
-      tools: { listChanged: true }
-    },
-    description: 'Provides web content fetching capabilities',
-    version: '1.0.0',
-    lastConnected: new Date().toISOString()
-  }
-];
+import { registeredServers, MCPServer } from './data';
 
 // Type definition for MCP server
 interface McpServer {

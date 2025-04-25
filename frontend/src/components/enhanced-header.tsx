@@ -20,8 +20,12 @@ import {
   Terminal,
   Monitor,
   ShieldCheck,
-  Database
+  Database,
+  Bot,
+  Cpu
 } from "lucide-react";
+import { usePathname } from "next/navigation";
+import Link from "next/link"; // Re-add Link import
 
 // Server status indicator animations
 const pulseAnimation = {
@@ -269,6 +273,12 @@ export function EnhancedHeader({
 }: EnhancedHeaderProps) {
   const { theme } = useTheme();
   const [activeToolsServer, setActiveToolsServer] = useState<string | null>(null);
+  const pathname = usePathname(); // Get current path
+
+  // Determine button text and link based on current path
+  const isAgentStudio = pathname === '/agent-studio';
+  const studioLinkHref = isAgentStudio ? '/' : '/agent-studio';
+  const studioLinkText = isAgentStudio ? 'MCP Studio' : 'Agent Studio';
 
   // Get first active server for tools display
   const activeServer = servers.find(s => s.isActive) || null;
@@ -325,6 +335,19 @@ export function EnhancedHeader({
               tools={activeServer.tools}
             />
           )}
+
+          {/* Studio Link/Button - Dynamic based on current page */}
+          <Link href={studioLinkHref} passHref>
+            <motion.div
+              className="flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-300 backdrop-blur-md border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary"
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {/* Keep Cpu icon for consistency or use a different one? Using Cpu for now. */}
+              <Cpu className="h-4 w-4" /> 
+              <span className="text-sm font-medium hidden sm:inline-block">{studioLinkText}</span>
+            </motion.div>
+          </Link>
 
           <AnimatedThemeToggle className="ml-auto" />
 

@@ -133,45 +133,45 @@
     color: var(--foreground);
     min-height: 100vh;
   }
-  
+
   /* Custom Scrollbar */
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-track {
     background-color: transparent;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background-color: rgba(var(--primary-rgb), 0.3);
     border-radius: 100px;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: rgba(var(--primary-rgb), 0.5);
   }
-  
+
   /* Global custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background-color: rgba(var(--background), 0.5);
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background-color: var(--border);
     border-radius: 100px;
     transition: background-color 0.2s;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background-color: rgba(var(--primary-rgb), 0.3);
   }
-  
+
   /* Glass card effect */
   .glass-card {
     background-color: rgba(var(--background), 0.7);
@@ -180,12 +180,12 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
   }
-  
+
   .glass-card:hover {
     border-color: rgba(var(--primary-rgb), 0.2);
     box-shadow: 0 4px 6px -1px rgba(var(--primary-rgb), 0.05);
   }
-  
+
   /* Gradient text effect */
   .gradient-text {
     background-clip: text;
@@ -193,14 +193,130 @@
     color: transparent;
     background-image: linear-gradient(to right, var(--primary), rgba(var(--primary-rgb), 0.7));
   }
-  
+
   /* Subtle hover effect for cards */
   .hover-lift {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  
+
   .hover-lift:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 15px -3px rgba(var(--primary-rgb), 0.05);
+  }
+
+  /* Markdown styling for agent terminal */
+  .prose-invert {
+    color: #e2e8f0;
+  }
+
+  .prose-invert h1,
+  .prose-invert h2,
+  .prose-invert h3,
+  .prose-invert h4,
+  .prose-invert h5,
+  .prose-invert h6 {
+    color: #f8fafc;
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+    font-weight: 600;
+  }
+
+  .prose-invert h1 {
+    font-size: 1.5em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.3em;
+  }
+
+  .prose-invert h2 {
+    font-size: 1.3em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.3em;
+  }
+
+  .prose-invert h3 {
+    font-size: 1.2em;
+  }
+
+  .prose-invert p {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
+  .prose-invert a {
+    color: #60a5fa;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .prose-invert a:hover {
+    color: #93c5fd;
+  }
+
+  .prose-invert ul,
+  .prose-invert ol {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-left: 1.5em;
+  }
+
+  .prose-invert ul {
+    list-style-type: disc;
+  }
+
+  .prose-invert ol {
+    list-style-type: decimal;
+  }
+
+  .prose-invert li {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+  }
+
+  .prose-invert blockquote {
+    border-left: 3px solid #4b5563;
+    padding-left: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-style: italic;
+    color: #9ca3af;
+  }
+
+  .prose-invert code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  .prose-invert pre {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    overflow-x: auto;
+    border-radius: 0.375rem;
+  }
+
+  .prose-invert table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  .prose-invert th {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.5em;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .prose-invert td {
+    padding: 0.5em;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .prose-invert hr {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 2em;
+    margin-bottom: 2em;
   }
 }
