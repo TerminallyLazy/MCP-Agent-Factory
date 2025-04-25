@@ -87,9 +87,9 @@ async def chat():
     # Create the agent with the model and tools
     agent = Agent(model=model, tools=tools)
     
-    print("\nMulti-Server Agent is ready. Enter 'quit' to exit.")
+    print("\\nMulti-Server Agent is ready. Enter 'quit' to exit.")
     while True:
-        user_input = input("\nYou: ")
+        user_input = input("\\nYou: ")
         if user_input.lower() in ["exit", "quit", "bye"]:
             break
 
@@ -97,38 +97,38 @@ async def chat():
         print("Running agent...")
         result = await agent.run(user_input)
         # Print debug information about the result object
-        print(f"\nResult type: {type(result)}")
-        print(f"Result dir: {dir(result)}")
+        print(f"\\nResult type: {type(result)}")
+        print(f"\\nResult dir: {dir(result)}")
 
         # The result object might have different attributes depending on the version
         # Try different attribute names that might contain the output
         if hasattr(result, 'response'):
-            print(f"\nAgent: {result.response}")
+            print(f"\\nAgent: {result.response}")
         elif hasattr(result, 'content'):
-            print(f"\nAgent: {result.content}")
+            print(f"\\nAgent: {result.content}")
         elif hasattr(result, 'message'):
-            print(f"\nAgent: {result.message}")
+            print(f"\\nAgent: {result.message}")
         elif hasattr(result, 'text'):
-            print(f"\nAgent: {result.text}")
+            print(f"\\nAgent: {result.text}")
         elif hasattr(result, 'assistant_response'):
-            print(f"\nAgent: {result.assistant_response}")
+            print(f"\\nAgent: {result.assistant_response}")
         else:
             # If none of the expected attributes are found, print the entire result
-            print(f"\nAgent result: {result}")
+            print(f"\\nAgent result: {result}")
 
         # Try to access the result as a dictionary
         try:
             if hasattr(result, '__dict__'):
-                print(f"\nResult __dict__: {result.__dict__}")
+                print(f"\\nResult __dict__: {result.__dict__}")
         except Exception as e:
-            print(f"Error accessing __dict__: {e}")
+            print(f"\\nError accessing __dict__: {e}")
     finally:
         # Clean up resources
         print("Cleaning up resources...")
         # Uncomment the following line if cleanup is needed
         # await client.cleanup()
   except Exception as e:
-    print(f"Error in main: {e}")
+    print(f"\\nError in main: {e}")
     import traceback
     traceback.print_exc()
 
@@ -205,38 +205,38 @@ async def run_agent():
                 print("Running agent...")
                 result = await agent.run(user_input)
                 # Print debug information about the result object
-                print(f"\nResult type: {type(result)}")
-                print(f"Result dir: {dir(result)}")
+                print(f"\\nResult type: {type(result)}")
+                print(f"\\nResult dir: {dir(result)}")
 
                 # The result object might have different attributes depending on the version
                 # Try different attribute names that might contain the output
                 if hasattr(result, 'response'):
-                    print(f"\nAgent: {result.response}")
+                    print(f"\\nAgent: {result.response}")
                 elif hasattr(result, 'content'):
-                    print(f"\nAgent: {result.content}")
+                    print(f"\\nAgent: {result.content}")
                 elif hasattr(result, 'message'):
-                    print(f"\nAgent: {result.message}")
+                    print(f"\\nAgent: {result.message}")
                 elif hasattr(result, 'text'):
-                    print(f"\nAgent: {result.text}")
+                    print(f"\\nAgent: {result.text}")
                 elif hasattr(result, 'assistant_response'):
-                    print(f"\nAgent: {result.assistant_response}")
+                    print(f"\\nAgent: {result.assistant_response}")
                 else:
                     # If none of the expected attributes are found, print the entire result
-                    print(f"\nAgent result: {result}")
+                    print(f"\\nAgent result: {result}")
 
                 # Try to access the result as a dictionary
                 try:
                     if hasattr(result, '__dict__'):
-                        print(f"\nResult __dict__: {result.__dict__}")
+                        print(f"\\nResult __dict__: {result.__dict__}")
                 except Exception as e:
-                    print(f"Error accessing __dict__: {e}")
+                    print(f"\\nError accessing __dict__: {e}")
         finally:
             # Clean up resources
             print("Cleaning up resources...")
             # Uncomment the following line if cleanup is needed
             # await client.cleanup()
     except Exception as e:
-        print(f"Error in main: {e}")
+        print(f"\\nError in main: {e}")
         import traceback
         traceback.print_exc()
 
@@ -308,7 +308,7 @@ async def configure_client():
                     server_tools[server_name] += 1
 
         # Report on available tools
-        print("\nMCP Servers and Tool Counts:")
+        print("\\nMCP Servers and Tool Counts:")
         for server, count in server_tools.items():
             print(f"- {server}: {count} tools")
     except Exception as e:
@@ -356,9 +356,9 @@ async def main():
             agent = Agent(model=model, tools=tools, system_prompt=system_prompt)
 
             # Process user messages in a loop
-            print("\nMulti-Server Agent is ready. Enter 'quit' to exit.")
+            print("\\nMulti-Server Agent is ready. Enter 'quit' to exit.")
             while True:
-                user_input = input("\nYou: ")
+                user_input = input("\\nYou: ")
                 if user_input.lower() in ["exit", "quit", "bye"]:
                     break
 
@@ -366,38 +366,38 @@ async def main():
                 print("Running agent...")
                 result = await agent.run(user_input)
                 # Print debug information about the result object
-                print(f"\nResult type: {type(result)}")
-                print(f"Result dir: {dir(result)}")
+                print(f"\\nResult type: {type(result)}")
+                print(f"\\nResult dir: {dir(result)}")
 
                 # The result object might have different attributes depending on the version
                 # Try different attribute names that might contain the output
                 if hasattr(result, 'response'):
-                    print(f"\nAgent: {result.response}")
+                    print(f"\\nAgent: {result.response}")
                 elif hasattr(result, 'content'):
-                    print(f"\nAgent: {result.content}")
+                    print(f"\\nAgent: {result.content}")
                 elif hasattr(result, 'message'):
-                    print(f"\nAgent: {result.message}")
+                    print(f"\\nAgent: {result.message}")
                 elif hasattr(result, 'text'):
-                    print(f"\nAgent: {result.text}")
+                    print(f"\\nAgent: {result.text}")
                 elif hasattr(result, 'assistant_response'):
-                    print(f"\nAgent: {result.assistant_response}")
+                    print(f"\\nAgent: {result.assistant_response}")
                 else:
                     # If none of the expected attributes are found, print the entire result
-                    print(f"\nAgent result: {result}")
+                    print(f"\\nAgent result: {result}")
 
                 # Try to access the result as a dictionary
                 try:
                     if hasattr(result, '__dict__'):
-                        print(f"\nResult __dict__: {result.__dict__}")
+                        print(f"\\nResult __dict__: {result.__dict__}")
                 except Exception as e:
-                    print(f"Error accessing __dict__: {e}")
+                    print(f"\\nError accessing __dict__: {e}")
         finally:
             # Clean up resources
             print("Cleaning up resources...")
             # Uncomment the following line if cleanup is needed
             # await client.cleanup()
     except Exception as e:
-        print(f"Error in main: {e}")
+        print(f"\\nError in main: {e}")
         import traceback
         traceback.print_exc()
 
@@ -405,9 +405,9 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\nAgent execution interrupted by user")
+        print("\\nAgent execution interrupted by user")
     except Exception as e:
-        print(f"Fatal error: {e}")
+        print(f"\\nFatal error: {e}")
         import traceback
         traceback.print_exc()
 `

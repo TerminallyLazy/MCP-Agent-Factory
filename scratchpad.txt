@@ -32,3 +32,12 @@
 **Issue:** Frontend receives `EventSource ERROR` when trying to connect to `/api/agent/stream`.
 **Cause:** The Next.js development server isn't running to handle the API routes defined in `frontend/src/app/api/`.
 **Solution:** Run `npm run dev` or `yarn dev` within the `frontend` directory.
+
+Encountered npm ENOTEMPTY error when running `my_mcp_agent`:
+```
+npm error syscall rename npm error path /home/lazy/.npm/_npx/15b07286cbcc3329/node_modules/@modelcontextprotocol/server-memory npm error dest /home/lazy/.npm/_npx/15b07286cbcc3329/node_modules/@modelcontextprotocol/.server-memory-CR5nTo1L npm error errno -39 npm error ENOTEMPTY: directory not empty, rename '/home/lazy/.npm/_npx/15b07286cbcc3329/node_modules/@modelcontextprotocol/server-memory' -> '/home/lazy/.npm/_npx/15b07286cbcc3329/node_modules/@modelcontextprotocol/.server-memory-CR5nTo1L'
+```
+Attempted fixes:
+1. `npm cache clean --force`
+2. `rm -rf /home/lazy/.npm/_npx/15b07286cbcc3329` (the specific dir from the error)
+3. `cd frontend && rm -rf node_modules package-lock.json && npm install`

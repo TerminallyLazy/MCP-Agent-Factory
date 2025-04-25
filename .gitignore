@@ -15,15 +15,14 @@ package-lock.json
 frontend/package-lock.json
 
 frontend/mcp_config.json
-frontend/src/mcp_config.json
 frontend/src/.env
 
 src/mcp_config.json
 src/.env
 
 frontend/mcp_config.json
-frontend/src/mcp_config.json
 frontend/src/.env
 frontend/src/mcp_config.json
 mcp_config.json
 
+agents/generated/metadata.json
