@@ -6,8 +6,6 @@ node_modules
 frontend/.next
 frontend/node_modules
 
-mcp_config.json
-
 src/mcp_config.json
 
 agents/.env
@@ -28,4 +26,4 @@ frontend/src/mcp_config.json
 frontend/src/.env
 frontend/src/mcp_config.json
 mcp_config.json
-mcp_config.json
+
