@@ -1,6 +1,7 @@
-# MCP Integration
+# MCP Agent Factory
 
-This directory contains the necessary files to integrate the Model Context Protocol (MCP) into your project. MCP allows AI agents to access external tools and capabilities like file system access, web search, and more.
+This directory contains the necessary files to add and use MCP servers as well as build, configure, and deploy MCP Tool using Agents. 
+ - MCP allows AI agents to access external tools and capabilities like file system access, web search, and more.
 
 ## Directory Structure
 
@@ -13,7 +14,6 @@ mcp-integration/
 │   │   ├── __init__.py
 │   │   ├── agent_factory.py # Factory for creating MCP agents
 │   │   ├── client.py        # MCP client implementation
-│   │   └── mock_client.py   # Mock client for testing
 │   └── tools/               # Tool implementations
 │       └── __init__.py
 ├── docs/                    # Documentation
